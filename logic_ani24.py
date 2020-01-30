@@ -179,10 +179,10 @@ class LogicAni24(object):
             if LogicAni24.current_data is not None:
                 new_title = Util.change_text_for_use_filename(new_title)
                 LogicAni24.current_data['title'] = new_title
-                for data in LogicAni24.current_data['episode']:
-                    tmp = data['filename'].split('.')
-                    tmp[0] = new_title
-                    data['filename'] = '.'.join(tmp)
+                #for data in LogicAni24.current_data['episode']:
+                #    tmp = data['filename'].split('.')
+                #    tmp[0] = new_title
+                #    data['filename'] = '.'.join(tmp)
                 return LogicAni24.current_data
             else:
                 ret['ret'] = False
