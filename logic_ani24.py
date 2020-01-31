@@ -64,7 +64,7 @@ class LogicAni24(object):
             url2 = 'https://fileiframe.com/ani_video4/%s.html?player=' % episode_id
             data = LogicAni24.get_html(url2)
             video_url = 'http%s.mp4' % data.split('.mp4"')[0].split('"http')[-1]
-            return video_url, data
+            return video_url
         except Exception as e:
             logger.error('Exception:%s', e)
             logger.error(traceback.format_exc())
@@ -114,7 +114,7 @@ class LogicAni24(object):
             
             for t in tags:
                 entity = {}
-                entity['program'] = data
+                entity['program_title'] = data['title']
                 entity['code'] = re1.search(t.attrib['href']).group('code')
                 data['episode'].append(entity)
                 tmp = t.xpath('.//img')[0]
@@ -180,7 +180,8 @@ class LogicAni24(object):
             if LogicAni24.current_data is not None:
                 new_title = Util.change_text_for_use_filename(new_title)
                 LogicAni24.current_data['title'] = new_title
-                # for data in LogicAni24.current_data['episode']:
+                for data in LogicAni24.current_data['episode']:
+                    data['program_title'] = new_title
                 #    tmp = data['filename'].split('.')
                 #    tmp[0] = new_title
                 #    data['filename'] = '.'.join(tmp)
