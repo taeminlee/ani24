@@ -218,9 +218,9 @@ class LogicAni24(object):
             
             for code in whitelist_programs:
                 downloaded = db.session.query(ModelAni24) \
-                            .filter_by(code=code) \
+                            .filter_by(programcode=code) \
                             .with_for_update().all()
-                dl_codes = [dl.code for dl in downloaded]
+                dl_codes = [dl.episodecode for dl in downloaded]
                 data = [get_title_info(program_code)]
                 for episode in data['episodes']:
                     e_code = episode['code']
