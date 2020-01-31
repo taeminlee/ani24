@@ -114,6 +114,7 @@ class LogicAni24(object):
             
             for t in tags:
                 entity = {}
+                entity['program_code'] = data['code']
                 entity['program_title'] = data['title']
                 entity['code'] = re1.search(t.attrib['href']).group('code')
                 data['episode'].append(entity)
