@@ -217,17 +217,17 @@ class LogicAni24(object):
             whitelist_programs = [x.strip().replace(' ', '') for x in whitelist_program.replace('\n', ',').split(',')]
             
             for code in whitelist_programs:
-                logger.error('auto download start : %s', code)
+                logger.info('auto download start : %s', code)
                 downloaded = db.session.query(ModelAni24) \
                             .filter_by(programcode=code) \
                             .with_for_update().all()
                 dl_codes = [dl.episodecode for dl in downloaded]
-                logger.error('downloaded codes :%s', dl_codes)
+                logger.info('downloaded codes :%s', dl_codes)
                 data = [get_title_info(program_code)]
                 for episode in data['episodes']:
                     e_code = episode['code']
                     if(e_code not in dl_codes):
-                        logger.error('Logic Queue added :%s', e_code)
+                        logger.info('Logic Queue added :%s', e_code)
                         LogicQueue.add_queue(episode)
                         
             logger.debug('=======================================')
