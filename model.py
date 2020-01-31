@@ -46,7 +46,7 @@ class ModelSetting(db.Model):
             logger.error('Exception:%s %s', e, key)
             logger.error(traceback.format_exc())
 
-class ModelWavveEpisode(db.Model):
+class ModelAni24(db.Model):
     __tablename__ = 'plugin_%s_auto_episode' % package_name
     __table_args__ = {'mysql_collate': 'utf8_general_ci'}
     __bind_key__ = package_name
