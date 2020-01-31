@@ -57,6 +57,9 @@ class Logic(object):
             logger.debug('%s plugin_load', package_name)
             # DB 초기화
             Logic.db_init()
+            
+            if ModelSetting.get('auto_start') == 'True':
+                Logic.scheduler_start()
 
             # 편의를 위해 json 파일 생성
             from plugin import plugin_info
