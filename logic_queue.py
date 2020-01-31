@@ -105,7 +105,7 @@ class LogicQueue(object):
                     continue
                 
                 from .logic_ani24 import LogicAni24
-                entity.url, program_data = LogicAni24.get_video_url(entity.info['code'])
+                entity.url = LogicAni24.get_video_url(entity.info['code'])
                 if entity.url is None:
                     self.ffmpeg_status_kor = 'URL실패'
                     plugin.socketio_list_refresh()
@@ -115,7 +115,7 @@ class LogicQueue(object):
                 max_pf_count = 0 
                 save_path = ModelSetting.get('download_path')
                 if ModelSetting.get('auto_make_folder') == 'True':
-                    program_path = os.path.join(save_path, program_data['title'])
+                    program_path = os.path.join(save_path, entity.info['program_title'])
                     save_path = program_path
                 try:
                     if not os.path.exists(save_path):
