@@ -103,6 +103,10 @@ class LogicQueue(object):
                 entity = LogicQueue.download_queue.get()
                 if entity.cancel:
                     continue
+                    
+                episode = ModelAni24('auto', info=info)
+                db.session.add(episode)
+                db.session.commit()
                 
                 from .logic_ani24 import LogicAni24
                 entity.url = LogicAni24.get_video_url(entity.info['code'])
@@ -128,8 +132,9 @@ class LogicQueue(object):
                     entity.ffmpeg_percent = 100
                     plugin.socketio_list_refresh()
                     continue
-                f = ffmpeg.Ffmpeg(entity.url, entity.info['filename'], plugin_id=entity.entity_id, listener=LogicQueue.ffmpeg_listener, max_pf_count=max_pf_count, call_plugin=package_name, save_path=save_path)
+                f = ffmpeg.Ffmpeg(entity.url, entity.info['filename'], plugin_id=entity.info['code'], listener=LogicQueue.ffmpeg_listener, max_pf_count=max_pf_count, call_plugin=package_name, save_path=save_path)
                 f.start()
+                
                 LogicQueue.current_ffmpeg_count += 1
                 LogicQueue.download_queue.task_done()    
             except Exception as e: 
@@ -143,7 +148,7 @@ class LogicQueue(object):
         refresh_type = None
         if arg['type'] == 'status_change':
             if arg['status'] == ffmpeg.Status.DOWNLOADING:
-                episode = db.session.query(ModelAni24).filter_by(id=arg['plugin_id']).with_for_update().first()
+                episode = db.session.query(ModelAni24).filter_by(episodecode=arg['plugin_id']).with_for_update().first()
                 if episode:
                     episode.ffmpeg_status = int(arg['status'])
                     episode.duration = arg['data']['duration']
@@ -154,7 +159,7 @@ class LogicQueue(object):
                 pass
         elif arg['type'] == 'last':
             LogicQueue.current_ffmpeg_count += -1
-            episode = db.session.query(ModelAni24).filter_by(id=arg['plugin_id']).with_for_update().first()
+            episode = db.session.query(ModelAni24).filter_by(episodecode=arg['plugin_id']).with_for_update().first()
             if arg['status'] == ffmpeg.Status.WRONG_URL or arg['status'] == ffmpeg.Status.WRONG_DIRECTORY or arg['status'] == ffmpeg.Status.ERROR or arg['status'] == ffmpeg.Status.EXCEPTION:
                 episode.etc_abort = 1
             elif arg['status'] == ffmpeg.Status.USER_STOP:
@@ -202,9 +207,6 @@ class LogicQueue(object):
     def add_queue(info):
         try:
             entity = QueueEntity.create(info)
-            episode = ModelAni24('auto', info=info)
-            db.session.add(episode)
-            db.session.commit()
             if entity is not None:
                 LogicQueue.download_queue.put(entity)
                 return True
