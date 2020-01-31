@@ -104,7 +104,7 @@ class LogicQueue(object):
                 if entity.cancel:
                     continue
                     
-                episode = ModelAni24('auto', info=info)
+                episode = ModelAni24('auto', info=entity.info)
                 db.session.add(episode)
                 db.session.commit()
                 
