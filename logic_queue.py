@@ -21,7 +21,7 @@ from framework.logger import get_logger
 # 패키지
 from .plugin import package_name, logger
 import system
-from .model import ModelSetting
+from .model import ModelSetting, ModelAni24
 
 #########################################################
 
@@ -150,6 +150,15 @@ class LogicQueue(object):
                 pass
         elif arg['type'] == 'last':
             LogicQueue.current_ffmpeg_count += -1
+            arg['status'] == ffmpeg.Status.COMPLETED:
+                episode = ModelAni24('auto', info=entity)
+                episode.completed = True
+                episode.end_time = datetime.now()
+                episode.download_time = (episode.end_time - episode.start_time).seconds
+                episode.filesize = arg['data']['filesize']
+                episode.filesize_str = arg['data']['filesize_str']
+                episode.download_speed = arg['data']['download_speed']
+                db.session.add(episode)
             pass
         elif arg['type'] == 'log':
             pass
