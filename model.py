@@ -90,7 +90,7 @@ class ModelAni24(db.Model):
         self.retry = 0
         self.call = call
         self.set_info(info)
-        logger.info(str(self))
+        #logger.info(str(self))
 
     def __repr__(self):
         #return "<Episode(id:%s, episode_code:%s, quality:%s)>" % (self.id, self.episode_code, self.quality)
