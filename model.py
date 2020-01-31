@@ -81,6 +81,7 @@ class ModelAni24(db.Model):
     def __init__(self, call, info):
         self.created_time = datetime.now()
         self.completed = False
+        self.start_time = datetime.now()
         self.user_abort = False
         self.pf_abort = False
         self.etc_abort = 0
