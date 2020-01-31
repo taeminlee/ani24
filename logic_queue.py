@@ -30,7 +30,7 @@ class QueueEntity:
     entity_list = []
 
     def __init__(self, info):
-        self.entity_id = QueueEntity.static_index
+        self.entity_id = info['code']
         self.info = info
         self.url = None
         self.ffmpeg_status = -1
@@ -132,7 +132,7 @@ class LogicQueue(object):
                     entity.ffmpeg_percent = 100
                     plugin.socketio_list_refresh()
                     continue
-                f = ffmpeg.Ffmpeg(entity.url, entity.info['filename'], plugin_id=entity.info['code'], listener=LogicQueue.ffmpeg_listener, max_pf_count=max_pf_count, call_plugin=package_name, save_path=save_path)
+                f = ffmpeg.Ffmpeg(entity.url, entity.info['filename'], plugin_id=entity.entity_id, listener=LogicQueue.ffmpeg_listener, max_pf_count=max_pf_count, call_plugin=package_name, save_path=save_path)
                 f.start()
                 
                 LogicQueue.current_ffmpeg_count += 1
