@@ -150,7 +150,7 @@ class LogicQueue(object):
                 pass
         elif arg['type'] == 'last':
             LogicQueue.current_ffmpeg_count += -1
-            arg['status'] == ffmpeg.Status.COMPLETED:
+            if arg['status'] == ffmpeg.Status.COMPLETED:
                 episode = ModelAni24('auto', info=entity)
                 episode.completed = True
                 episode.end_time = datetime.now()
