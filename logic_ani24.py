@@ -208,9 +208,6 @@ class LogicAni24(object):
             logger.error('Exception:%s', e)
             logger.error(traceback.format_exc())
     
-    class LogicRecent(object):
-    current_auto_count_ffmpeg = 0
-
     @staticmethod
     def scheduler_function():
         try:
