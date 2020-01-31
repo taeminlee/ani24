@@ -12,6 +12,7 @@
   {{ macros.m_col(1,  macros.m_strong('Idx')) }}
   {{ macros.m_col(2,  macros.m_strong('CreatedTime')) }}
   {{ macros.m_col(4,  macros.m_strong('Filename')) }}
+  {{ macros.m_col(5,  macros.m_strong('ProgramTitle')) }}
   {{ macros.m_col(3,  macros.m_strong('Status')) }}
   {{ macros.m_col(2,  macros.m_strong('Action')) }}
   {{ macros.m_row_end() }}
@@ -62,6 +63,7 @@ function make_download_list(data) {
     str += m_col(1, data[i].entity_id);
     str += m_col(2, data[i].created_time);
     str += m_col(4, data[i].info.filename);
+    str += m_col(5, data[i].info.program_title);
 
     label = data[i].ffmpeg_status_kor
     if (data[i].ffmpeg_percent != 0) {
