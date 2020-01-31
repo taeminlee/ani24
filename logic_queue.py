@@ -143,23 +143,42 @@ class LogicQueue(object):
         refresh_type = None
         if arg['type'] == 'status_change':
             if arg['status'] == ffmpeg.Status.DOWNLOADING:
-                pass
+                episode = db.session.query(ModelAni24).filter_by(id=arg['plugin_id']).with_for_update().first()
+                if episode:
+                    episode.ffmpeg_status = int(arg['status'])
+                    episode.duration = arg['data']['duration']
+                    db.session.commit()
             elif arg['status'] == ffmpeg.Status.COMPLETED:
                 pass
             elif arg['status'] == ffmpeg.Status.READY:
                 pass
         elif arg['type'] == 'last':
             LogicQueue.current_ffmpeg_count += -1
+            episode = db.session.query(ModelAni24).filter_by(id=arg['plugin_id']).with_for_update().first()
+            if arg['status'] == ffmpeg.Status.WRONG_URL or arg['status'] == ffmpeg.Status.WRONG_DIRECTORY or arg['status'] == ffmpeg.Status.ERROR or arg['status'] == ffmpeg.Status.EXCEPTION:
+                episode.etc_abort = 1
+            elif arg['status'] == ffmpeg.Status.USER_STOP:
+                episode.user_abort = True
+                logger.debug('Status.USER_STOP received..')
             if arg['status'] == ffmpeg.Status.COMPLETED:
-                episode = ModelAni24('auto', info=entity)
                 episode.completed = True
                 episode.end_time = datetime.now()
                 episode.download_time = (episode.end_time - episode.start_time).seconds
                 episode.filesize = arg['data']['filesize']
                 episode.filesize_str = arg['data']['filesize_str']
                 episode.download_speed = arg['data']['download_speed']
-                db.session.add(episode)
-            pass
+                logger.debug('Status.COMPLETED received..')
+            elif arg['status'] == ffmpeg.Status.TIME_OVER:
+                episode.etc_abort = 2
+            elif arg['status'] == ffmpeg.Status.PF_STOP:
+                episode.pf = int(arg['data']['current_pf_count'])
+                episode.pf_abort = 1
+            elif arg['status'] == ffmpeg.Status.FORCE_STOP:
+                episode.etc_abort = 3
+            elif arg['status'] == ffmpeg.Status.HTTP_FORBIDDEN:
+                episode.etc_abort = 4
+            db.session.commit()
+            logger.debug('LAST commit %s', arg['status'])
         elif arg['type'] == 'log':
             pass
         elif arg['type'] == 'normal':
