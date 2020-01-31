@@ -207,3 +207,29 @@ class LogicAni24(object):
             logger.error('Exception:%s', e)
             logger.error(traceback.format_exc())
     
+    class LogicRecent(object):
+    current_auto_count_ffmpeg = 0
+
+    @staticmethod
+    def scheduler_function():
+        try:
+            logger.debug('Ani24 scheduler_function start..')
+
+            whitelist_program = ModelSetting.get('whitelist_program') 
+            whitelist_programs = [x.strip().replace(' ', '') for x in whitelist_program.replace('\n', ',').split(',')]
+            
+            for code in whitelist_programs:
+                downloaded = db.session.query(ModelAni24) \
+                            .filter_by(code=code) \
+                            .with_for_update().all()
+                dl_codes = [dl.code for dl in downloaded]
+                data = [get_title_info(program_code)]
+                for episode in data['episodes']:
+                    e_code = episode['code']
+                    if(e_code not in dl_codes):
+                        LogicQueue.add_queue(episode)
+                        
+            logger.debug('=======================================')
+        except Exception as e: 
+            logger.error('Exception:%s', e)
+            logger.error(traceback.format_exc())
