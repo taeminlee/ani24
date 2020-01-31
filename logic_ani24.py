@@ -20,7 +20,7 @@ from framework.logger import get_logger
 
 # 패키지
 from .plugin import package_name, logger
-from .model import ModelSetting
+from .model import ModelSetting, ModelAni24
 from .logic_queue import LogicQueue
 
 #########################################################
