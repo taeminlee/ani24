@@ -33,6 +33,9 @@ class Logic(object):
         'date_option' : '0', # 0:YYMMDD, 1:YYYY-MM-DD
         'auto_make_folder' : 'True',
         'max_ffmpeg_process_count' : '4', 
+        'auto_interval' : '5', 
+        'auto_start' : 'False', 
+        'whitelist_program' : '',
     }
 
 
@@ -76,7 +79,9 @@ class Logic(object):
     @staticmethod
     def scheduler_start():
         try:
-            pass
+            interval = ModelSetting.get('auto_interval')
+            job = Job(package_name, package_name, interval, Logic.scheduler_function, u"Ani24 다운로드", True)
+            scheduler.add_job_instance(job)
         except Exception as e:
             logger.error('Exception:%s', e)
             logger.error(traceback.format_exc())
@@ -85,7 +90,7 @@ class Logic(object):
     @staticmethod
     def scheduler_stop():
         try:
-            pass
+            scheduler.remove_job(package_name)
         except Exception as e:
             logger.error('Exception:%s', e)
             logger.error(traceback.format_exc())
@@ -109,7 +114,7 @@ class Logic(object):
     @staticmethod
     def scheduler_function():
         try:
-            pass
+            LogicAni24.scheduler_function()
         except Exception as e:
             logger.error('Exception:%s', e)
             logger.error(traceback.format_exc())
