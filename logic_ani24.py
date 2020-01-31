@@ -223,7 +223,7 @@ class LogicAni24(object):
                             .with_for_update().all()
                 dl_codes = [dl.episodecode for dl in downloaded]
                 logger.info('downloaded codes :%s', dl_codes)
-                data = [get_title_info(program_code)]
+                data = [LogicAni24.get_title_info(program_code)]
                 for episode in data['episodes']:
                     e_code = episode['code']
                     if(e_code not in dl_codes):
