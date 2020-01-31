@@ -219,6 +219,7 @@ class LogicAni24(object):
             for code in whitelist_programs:
                 logger.info('auto download start : %s', code)
                 downloaded = db.session.query(ModelAni24) \
+                            .filter(ModelAni24.completed.is_(True)) \
                             .filter_by(programcode=code) \
                             .with_for_update().all()
                 dl_codes = [dl.episodecode for dl in downloaded]
