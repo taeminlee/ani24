@@ -204,6 +204,7 @@ class LogicQueue(object):
             entity = QueueEntity.create(info)
             episode = ModelAni24('auto', info=info)
             db.session.add(episode)
+            db.session.commit()
             if entity is not None:
                 LogicQueue.download_queue.put(entity)
                 return True
