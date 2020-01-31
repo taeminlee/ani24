@@ -78,7 +78,7 @@ class ModelAni24(db.Model):
     download_speed = db.Column(db.String)
     call = db.Column(db.String)
 
-    def __init__(self, call, info, streaming):
+    def __init__(self, call, info):
         self.created_time = datetime.now()
         self.completed = False
         self.user_abort = False
