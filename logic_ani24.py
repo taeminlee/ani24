@@ -114,6 +114,7 @@ class LogicAni24(object):
             
             for t in tags:
                 entity = {}
+                entity['program'] = data
                 entity['code'] = re1.search(t.attrib['href']).group('code')
                 data['episode'].append(entity)
                 tmp = t.xpath('.//img')[0]
@@ -179,8 +180,7 @@ class LogicAni24(object):
             if LogicAni24.current_data is not None:
                 new_title = Util.change_text_for_use_filename(new_title)
                 LogicAni24.current_data['title'] = new_title
-                for data in LogicAni24.current_data['episode']:
-                    data['title'] = new_title
+                # for data in LogicAni24.current_data['episode']:
                 #    tmp = data['filename'].split('.')
                 #    tmp[0] = new_title
                 #    data['filename'] = '.'.join(tmp)
