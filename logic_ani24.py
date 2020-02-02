@@ -63,6 +63,7 @@ class LogicAni24(object):
                 return None
             url2 = 'https://fileiframe.com/ani_video4/%s.html?player=' % episode_id
             data = LogicAni24.get_html(url2)
+            logger.info(data)
             video_url = 'http%s.mp4' % data.split('.mp4"')[0].split('"http')[-1]
             return video_url
         except Exception as e:
